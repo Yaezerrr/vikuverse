@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 
-// Main gifs
+// Main GIFs
 import v2 from "./assets/images/viku2.gif";
 import v3 from "./assets/images/viku3.gif";
 import v4 from "./assets/images/viku4.gif";
@@ -15,7 +15,7 @@ import v15 from "./assets/images/viku15.png";
 import v16 from "./assets/images/viku16.gif";
 import v17 from "./assets/images/viku17.gif";
 
-// NEW GIFS viku31 - viku43
+// NEW GIFs viku31 - viku43
 import v31 from "./assets/images/viku31.gif";
 import v32 from "./assets/images/viku32.gif";
 import v33 from "./assets/images/viku33.gif";
@@ -146,7 +146,7 @@ function Home() {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
-  // Gif pairs loop
+  // GIF pairs loop
   useEffect(() => {
     if (!showPairs) return;
     const interval = setInterval(() => {
