@@ -1,0 +1,529 @@
+/* Animations */
+@keyframes collectibleInfoHover {
+  from {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  to {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes titlePulse {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+  }
+}
+
+@keyframes rainbowGlow {
+  0% {
+    box-shadow: 0 0 10px red, 0 0 20px red;
+  }
+  14% {
+    box-shadow: 0 0 10px orange, 0 0 20px orange;
+  }
+  28% {
+    box-shadow: 0 0 10px yellow, 0 0 20px yellow;
+  }
+  42% {
+    box-shadow: 0 0 10px green, 0 0 20px green;
+  }
+  57% {
+    box-shadow: 0 0 10px blue, 0 0 20px blue;
+  }
+  71% {
+    box-shadow: 0 0 10px indigo, 0 0 20px indigo;
+  }
+  85% {
+    box-shadow: 0 0 10px violet, 0 0 20px violet;
+  }
+  100% {
+    box-shadow: 0 0 10px red, 0 0 20px red;
+  }
+}
+
+@keyframes riseIn {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Collectibles Section */
+.collectibles-section {
+  padding: 40px 0;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow-x: hidden;
+  z-index: 3;
+  position: relative;
+}
+
+.collectibles-slider {
+  position: relative;
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+  overflow: hidden;
+  user-select: none;
+  overscroll-behavior: contain;
+  cursor: grab;
+  touch-action: pan-x;
+  will-change: transform;
+}
+
+.collectibles-slider:active {
+  cursor: grabbing;
+}
+
+.collectibles-slider .slick-track {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.collectible-item {
+  flex: 0 0 calc(20% - 10px);
+  margin: 0 5px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  background: transparent;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.collectible-wrapper {
+  width: 100%;
+  background: transparent;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.collectible-image {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.collectible-item:hover .collectible-image {
+  transform: scale(1.05);
+}
+
+.collectible-info {
+  margin-top: 10px;
+  background: transparent;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  width: 220px;
+  min-height: 200px;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.collectible-info:hover {
+  animation: collectibleInfoHover 0.3s ease-out forwards;
+}
+
+.collectible-info .rating {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: #ffd700;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.collectible-info .title {
+  font-size: 1.2rem;
+  color: #333;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.collectible-info .price {
+  font-size: 1.1rem;
+  color: #ff4500;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.collectible-info .price img.viku-currency {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.collectible-info .add-to-cart {
+  padding: 6px 12px;
+  background: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  transition: background 0.3s;
+  z-index: 5;
+  position: relative;
+}
+
+.collectible-info .add-to-cart:hover {
+  background: #e03e00;
+}
+
+/* Anime Hoodies Section */
+.anime-hoodies {
+  margin: 20px 0;
+  padding: 40px 0;
+  min-height: 800px;
+  z-index: 3;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.anime-hoodies-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  animation: titlePulse 2s ease-in-out infinite;
+  text-shadow: 0 0 5px rgba(255, 69, 0, 0.5);
+  z-index: 4;
+  background: transparent;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.anime-hoodies-slider {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  user-select: none;
+  overscroll-behavior: contain;
+  cursor: grab;
+  touch-action: pan-x;
+  will-change: transform;
+}
+
+.anime-hoodies-slider:active {
+  cursor: grabbing;
+}
+
+.anime-hoodies-slider .slick-track {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.anime-hoodies-item {
+  flex: 0 0 calc(20% - 10px);
+  margin: 0 5px;
+  padding: 10px;
+  text-align: center;
+  min-width: 0;
+  background: transparent;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.anime-hoodies-wrapper {
+  width: 100%;
+  background: transparent;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  animation: rainbowGlow 7s infinite;
+}
+
+.anime-hoodies-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.anime-hoodies-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.anime-hoodies-info {
+  margin-top: 10px;
+  min-height: 160px;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.anime-hoodies-info.rise-in {
+  animation: riseIn 0.5s ease-out forwards;
+}
+
+.anime-hoodies-info .rating {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #ffd700;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.anime-hoodies-info .title {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.anime-hoodies-info .price {
+  font-size: 1rem;
+  color: #ff4500;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.anime-hoodies-info .price img.viku-currency {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.anime-hoodies-info .add-to-cart {
+  padding: 5px 10px;
+  background: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  transition: background 0.3s;
+  z-index: 5;
+  position: relative;
+}
+
+.anime-hoodies-info .add-to-cart:hover {
+  background: #e03e00;
+}
+
+/* Slider Dots */
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.slider-dot {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.slider-dot.active {
+  background: white;
+  transform: scale(1.4);
+}
+
+.slider-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Selected Image Blur Fix */
+.image-blur-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.selected-image-container .image-blur-wrapper {
+  backdrop-filter: blur(3px);
+}
+
+/* Mobile View for Collectibles and Anime Hoodies */
+@media (max-width: 768px) {
+  .collectibles-section {
+    padding: 20px 0;
+    min-height: 400px;
+  }
+
+  .collectibles-slider {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .collectible-item {
+    flex: 0 0 calc(33.33% - 10px);
+    margin: 0 5px;
+    transform: translateZ(0);
+  }
+
+  .collectible-wrapper {
+    padding: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .collectible-image {
+    height: 200px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .collectible-info {
+    width: 140px;
+    padding: 8px;
+    min-height: 160px;
+    z-index: 2;
+    overflow: visible;
+  }
+
+  .collectible-info .rating {
+    font-size: 0.9rem;
+    color: #ffd700;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .collectible-info .title {
+    font-size: 1rem;
+  }
+
+  .collectible-info .price {
+    font-size: 0.9rem;
+  }
+
+  .collectible-info .add-to-cart {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+
+  .anime-hoodies {
+    margin: 10px 0;
+    padding: 20px 0;
+    min-height: 800px;
+  }
+
+  .anime-hoodies-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    padding: 8px;
+  }
+
+  .anime-hoodies-slider {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .anime-hoodies-item {
+    flex: 0 0 calc(33.33% - 10px);
+    margin: 0 5px;
+    padding: 5px;
+    transform: translateZ(0);
+  }
+
+  .anime-hoodies-wrapper {
+    padding: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .anime-hoodies-image {
+    height: 180px;
+  }
+
+  .anime-hoodies-info {
+    margin-top: 8px;
+    min-height: 160px;
+    z-index: 2;
+    overflow: visible;
+  }
+
+  .anime-hoodies-info .rating {
+    font-size: 0.85rem;
+    color: #ffd700;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .anime-hoodies-info .title {
+    font-size: 0.95rem;
+  }
+
+  .anime-hoodies-info .price {
+    font-size: 0.85rem;
+  }
+
+  .anime-hoodies-info .add-to-cart {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .slider-dots {
+    margin-top: 10px;
+  }
+
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .slider-dot.active {
+    transform: scale(1.3);
+  }
+}
