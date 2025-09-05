@@ -15,7 +15,7 @@ import v15 from "./assets/images/viku15.png";
 import v16 from "./assets/images/viku16.gif";
 import v17 from "./assets/images/viku17.gif";
 
-// NEW GIFs viku31 - viku43
+// NEW GIFS viku31 - viku43
 import v31 from "./assets/images/viku31.gif";
 import v32 from "./assets/images/viku32.gif";
 import v33 from "./assets/images/viku33.gif";
@@ -108,15 +108,11 @@ function Home() {
   // Shooting stars
   useEffect(() => {
     const spawnStar = () => {
-      const duration = Math.random() * 1 + 0.5; // 0.5–1.5s
-      const topStart = Math.random() * 20 + "%"; // Start within top 20% of screen
-      setShootingStars(prev => [...prev, { top: topStart, left: "-5%", duration, key: Date.now() }]);
-      setTimeout(() => {
-        setShootingStars(prev => prev.filter(star => star.key !== Date.now()));
-      }, duration * 1000);
+      const duration = Math.random() * 1 + 0.5;
+      setShootingStars([{ left: Math.random() * 100 + "%", duration, key: Date.now() }]);
+      setTimeout(() => setShootingStars([]), 1500);
     };
-    spawnStar(); // Initial spawn
-    const interval = setInterval(spawnStar, 4000 + Math.random() * 3000); // 4000–7000ms
+    const interval = setInterval(spawnStar, 4000 + Math.random() * 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -202,16 +198,7 @@ function Home() {
         <div key={i} className="star" style={{ top: s.top, left: s.left, width: s.size, height: s.size, animationDelay: s.delay }} />
       ))}
       {shootingStars.map(s => (
-        <div
-          key={s.key}
-          className="shooting-star"
-          style={{
-            top: s.top,
-            left: s.left,
-            animationDuration: `${s.duration}s`,
-            animationName: 'shootWithShine'
-          }}
-        />
+        <div key={s.key} className="shooting-star" style={{ left: s.left, animationDuration: `${s.duration}s` }} />
       ))}
       {ufo.show && <img src={v15} alt="ufo" className="ufo" style={{ top: ufo.top, left: ufo.left }} />}
 
