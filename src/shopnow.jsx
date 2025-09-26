@@ -1,23 +1,27 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import { useSwipeable } from "react-swipeable";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./ShopNow.css";
+import { useSwipeable } from "react-swipeable";
+import "./shopnow4.css";
+import "./shopnow.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
   faSlidersH,
-  faShoppingBag,
   faTrash,
   faHome,
   faHeart,
   faPlus,
   faMinus,
+  faCompass,
+  faMessage,
 } from "@fortawesome/free-solid-svg-icons";
-
-// Images & Media Imports
+import { BsCart4 } from "react-icons/bs";
+import { HiMenuAlt3 } from "react-icons/hi";
+import ShopNow2 from "./shopnow2.jsx";
+import viku14 from "./assets/images/viku14.png";
 import viku45 from "./assets/images/viku45.png";
 import viku46 from "./assets/images/viku46.png";
 import viku48 from "./assets/images/viku48.jpg";
@@ -37,9 +41,6 @@ import viku64 from "./assets/images/viku64.png";
 import viku65 from "./assets/images/viku65.png";
 import viku66 from "./assets/images/viku66.png";
 import viku67 from "./assets/images/viku67.png";
-import viku77 from "./assets/images/viku77.png";
-import viku78 from "./assets/images/viku78.png";
-import viku79 from "./assets/images/viku79.png";
 import viku80 from "./assets/images/viku80.jpg";
 import viku81 from "./assets/images/viku81.mp4";
 import viku82 from "./assets/images/viku82.gif";
@@ -56,16 +57,9 @@ import viku99 from "./assets/images/viku99.gif";
 import viku100 from "./assets/images/viku100.png";
 import viku39 from "./assets/images/viku39.gif";
 import viku41 from "./assets/images/viku41.gif";
-import viku68 from "./assets/images/viku68.png";
-import viku69 from "./assets/images/viku69.png";
-import viku70 from "./assets/images/viku70.png";
-import viku71 from "./assets/images/viku71.png";
-import viku72 from "./assets/images/viku72.png";
-import viku73 from "./assets/images/viku73.png";
-import viku74 from "./assets/images/viku74.png";
-import viku75 from "./assets/images/viku75.png";
-import viku76 from "./assets/images/viku76.png";
-import viku101 from "./assets/images/viku101.gif";
+import viku121 from "./assets/images/viku121.gif";
+import viku122 from "./assets/images/viku122.gif";
+import viku123 from "./assets/images/viku123.gif";
 
 function ShopNow() {
   const videoRef = useRef(null);
@@ -73,12 +67,21 @@ function ShopNow() {
   const collectiblesRef = useRef(null);
   const animeHoodiesRef = useRef(null);
   const editionSliderRef = useRef(null);
+  const newReleaseRef = useRef(null);
+  const topShelfH2Ref = useRef(null);
+  const limitedH2Ref = useRef(null);
+  const collectiblesH2Ref = useRef(null);
+  const topShelfHeaderRef = useRef(null);
+  const searchWrapperRef = useRef(null);
+  const cartBackgroundGifRef = useRef(null);
 
   const [currentMedia, setCurrentMedia] = useState("video");
-  const [heroText, setHeroText] = useState("Solo Leveling Collection");
+  const [heroText, setHeroText] = useState("Solo Leveling\nCollection");
   const [narutoStep, setNarutoStep] = useState(0);
   const [onePieceStep, setOnePieceStep] = useState(0);
   const [jujutsuStep, setJujutsuStep] = useState(0);
+  const [demonSlayerStep, setDemonSlayerStep] = useState(0);
+  const [demonSlayerGif, setDemonSlayerGif] = useState("gif1");
   const [showViku94, setShowViku94] = useState(false);
   const [showViku95, setShowViku95] = useState(false);
   const [showViku87, setShowViku87] = useState(false);
@@ -87,8 +90,79 @@ function ShopNow() {
   const [activeSection, setActiveSection] = useState("top-shelf");
   const [cartItems, setCartItems] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [glassBallPosition, setGlassBallPosition] = useState({ left: 0 });
+  const [isSearchVisible, setIsSearchVisible] = useState(true);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [playOnce, setPlayOnce] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const itemsPerSlide = useMemo(() => (window.innerWidth > 768 ? 5 : 2), []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsSearchVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsSearchVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+  };
+
+  const handleSearchBlur = () => {
+    setIsSearchFocused(false);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const updateGlassBallPosition = () => {
+      const topShelfRect = topShelfH2Ref.current?.getBoundingClientRect();
+      const limitedRect = limitedH2Ref.current?.getBoundingClientRect();
+      const collectiblesRect = collectiblesH2Ref.current?.getBoundingClientRect();
+      const topShelfHeaderRect = topShelfHeaderRef.current?.getBoundingClientRect();
+
+      if (topShelfRect && limitedRect && collectiblesRect && topShelfHeaderRect) {
+        const glassBallWidth = window.innerWidth <= 768 ? 180 : 300;
+        let position;
+        if (activeSection === "top-shelf") {
+          position = {
+            left: topShelfRect.left - topShelfHeaderRect.left + (topShelfRect.width / 2) - (glassBallWidth / 2)
+          };
+        } else if (activeSection === "limited") {
+          position = {
+            left: limitedRect.left - topShelfHeaderRect.left + (limitedRect.width / 2) - (glassBallWidth / 2)
+          };
+        } else if (activeSection === "collectibles") {
+          position = {
+            left: collectiblesRect.left - topShelfHeaderRect.left + (collectiblesRect.width / 2) - (glassBallWidth / 2)
+          };
+        }
+
+        if (window.innerWidth > 768 && activeSection === "collectibles") {
+          position = { left: position.left - 20 };
+        }
+
+        setGlassBallPosition(position);
+      }
+    };
+
+    updateGlassBallPosition();
+    window.addEventListener("resize", updateGlassBallPosition);
+
+    return () => window.removeEventListener("resize", updateGlassBallPosition);
+  }, [activeSection]);
 
   const cleanRating = useCallback((rating) => rating.replace(/\s*\(\d+\)/, ""), []);
 
@@ -96,34 +170,8 @@ function ShopNow() {
     return Array.from({ length: count }, (_, i) => start + i);
   }, []);
 
-  const collectiblesItems = useMemo(() => {
-    const ids = generateIds(5, 1);
-    return [
-      { id: ids[0], name: "Collectible Figure", image: viku48, rating: cleanRating("★★★★☆ (40)"), priceNaira: "₦127,984", priceViku: "10", vikuImage: viku100 },
-      { id: ids[1], name: "Collectible Poster", image: viku49, rating: cleanRating("★★★★★ (45)"), priceNaira: "₦47,984", priceViku: "5", vikuImage: viku100 },
-      { id: ids[2], name: "Collectible Accessory", image: viku51, rating: cleanRating("★★★☆☆ (30)"), priceNaira: "₦31,984", priceViku: "5", vikuImage: viku100 },
-      { id: ids[3], name: "Collectible Decor", image: viku52, rating: cleanRating("★★★★☆ (35)"), priceNaira: "₦63,984", priceViku: "10", vikuImage: viku100 },
-      { id: ids[4], name: "Collectible Art", image: viku80, rating: cleanRating("★★★★★ (50)"), priceNaira: "₦79,984", priceViku: "15", vikuImage: viku100 },
-    ];
-  }, [cleanRating]);
-
-  const animeHoodiesItems = useMemo(() => {
-    const ids = generateIds(9, 6);
-    return [
-      { id: ids[0], name: "Anime Hoodie 1", image: viku68, rating: cleanRating("★★★★☆ (40)"), priceNaira: "₦95,984", priceViku: "10", vikuImage: viku100 },
-      { id: ids[1], name: "Anime Hoodie 2", image: viku69, rating: cleanRating("★★★★★ (45)"), priceNaira: "₦103,984", priceViku: "15", vikuImage: viku100 },
-      { id: ids[2], name: "Anime Hoodie 3", image: viku70, rating: cleanRating("★★★☆☆ (30)"), priceNaira: "₦87,984", priceViku: "5", vikuImage: viku100 },
-      { id: ids[3], name: "Anime Hoodie 4", image: viku71, rating: cleanRating("★★★★☆ (35)"), priceNaira: "₦111,984", priceViku: "10", vikuImage: viku100 },
-      { id: ids[4], name: "Anime Hoodie 5", image: viku72, rating: cleanRating("★★★★★ (50)"), priceNaira: "₦100,784", priceViku: "15", vikuImage: viku100 },
-      { id: ids[5], name: "Anime Hoodie 6", image: viku73, rating: cleanRating("★★★★☆ (38)"), priceNaira: "₦94,384", priceViku: "10", vikuImage: viku100 },
-      { id: ids[6], name: "Anime Hoodie 7", image: viku74, rating: cleanRating("★★★☆☆ (28)"), priceNaira: "₦89,584", priceViku: "5", vikuImage: viku100 },
-      { id: ids[7], name: "Anime Hoodie 8", image: viku75, rating: cleanRating("★★★★☆ (42)"), priceNaira: "₦108,784", priceViku: "10", vikuImage: viku100 },
-      { id: ids[8], name: "Anime Hoodie 9", image: viku76, rating: cleanRating("★★★★★ (47)"), priceNaira: "₦113,584", priceViku: "15", vikuImage: viku100 },
-    ];
-  }, [cleanRating]);
-
   const topShelfItems = useMemo(() => {
-    const ids = generateIds(8, 15); // Increased count to 8
+    const ids = generateIds(8, 15);
     return [
       { id: ids[0], name: "Naruto T-Shirt", images: [viku54, viku55, viku56], rating: cleanRating("★★★★☆ (23)"), priceNaira: "₦47,984", priceViku: "5", vikuImage: viku100 },
       { id: ids[1], name: "Naruto Cap", images: [viku56, viku57, viku54], rating: cleanRating("★★★☆☆ (20)"), priceNaira: "₦31,984", priceViku: "5", vikuImage: viku100 },
@@ -156,6 +204,8 @@ function ShopNow() {
     setNarutoStep(0);
     setOnePieceStep(0);
     setJujutsuStep(0);
+    setDemonSlayerStep(0);
+    setDemonSlayerGif("gif1");
     setShowViku94(false);
     setShowViku95(false);
     setShowViku87(false);
@@ -169,22 +219,27 @@ function ShopNow() {
       switch (index) {
         case 0:
           setCurrentMedia("video");
-          setHeroText("Solo Leveling Collection");
+          setHeroText("Solo Leveling\nCollection");
           setTextAnimation(true);
           break;
         case 1:
           setNarutoStep(1);
-          setHeroText("NARUTO COLLECTION");
+          setHeroText("Naruto\nCollection");
           setTextAnimation(true);
           break;
         case 2:
           setOnePieceStep(1);
-          setHeroText("ONE PIECE COLLECTION");
+          setHeroText("One Piece\nCollection");
           setTextAnimation(true);
           break;
         case 3:
+          setDemonSlayerStep(1);
+          setHeroText("Demon Slayer\nCollection");
+          setTextAnimation(true);
+          break;
+        case 4:
           setJujutsuStep(1);
-          setHeroText("Jujutsu Kaisen & Demon Slayer Collection");
+          setHeroText("Jujutsu Kaisen\nCollection");
           setTextAnimation(true);
           break;
         default:
@@ -204,7 +259,9 @@ function ShopNow() {
           ? editionSliderRef
           : section === "collectibles"
           ? collectiblesRef
-          : animeHoodiesRef;
+          : section === "anime-hoodies"
+          ? animeHoodiesRef
+          : newReleaseRef;
       ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     },
     []
@@ -220,13 +277,23 @@ function ShopNow() {
             : cartItem
         );
       }
-      return [...prev, { ...item, cartId: Date.now(), quantity: 1 }];
+      const newCart = [...prev, { ...item, cartId: Date.now(), quantity: 1 }];
+      if (newCart.length >= 4) {
+        setPlayOnce(true);
+      }
+      return newCart;
     });
     console.log(`Added ${item.name} to cart`);
   }, []);
 
   const handleRemoveFromCart = useCallback((cartId) => {
-    setCartItems((prev) => prev.filter((item) => item.cartId !== cartId));
+    setCartItems((prev) => {
+      const newCart = prev.filter((item) => item.cartId !== cartId);
+      if (newCart.length < 4) {
+        setPlayOnce(true);
+      }
+      return newCart;
+    });
   }, []);
 
   const handleQuantityChange = useCallback((cartId, change) => {
@@ -243,6 +310,7 @@ function ShopNow() {
     console.log("Proceeding to checkout");
     setCartItems([]);
     setShowCart(false);
+    setPlayOnce(true);
   }, []);
 
   const toggleCart = useCallback(() => {
@@ -260,6 +328,18 @@ function ShopNow() {
       .reduce((total, item) => total + parseFloat(item.priceViku) * item.quantity, 0)
       .toFixed(0);
     return { nairaTotal: `₦${nairaTotal}`, vikuTotal };
+  }, [cartItems]);
+
+  const handleGifLoad = useCallback(() => {
+    if (cartBackgroundGifRef.current && !playOnce) {
+      cartBackgroundGifRef.current.style.animationPlayState = "paused";
+    }
+  }, [playOnce]);
+
+  useEffect(() => {
+    if (cartItems.length < 4) {
+      setPlayOnce(true);
+    }
   }, [cartItems]);
 
   useEffect(() => {
@@ -281,13 +361,13 @@ function ShopNow() {
         vikuImg.src = item.vikuImage;
       });
     };
-    preloadImages(collectiblesItems);
-    preloadImages(animeHoodiesItems);
     preloadImages(topShelfItems);
     preloadImages(editionItems);
-    const viku101Img = new Image();
-    viku101Img.src = viku101;
-  }, [collectiblesItems, animeHoodiesItems, topShelfItems, editionItems]);
+    [viku121, viku122, viku123].forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [topShelfItems, editionItems]);
 
   useEffect(() => {
     const timers = [];
@@ -302,7 +382,7 @@ function ShopNow() {
         timers.push(
           setTimeout(() => {
             setCurrentMedia("done");
-            setHeroText("NARUTO COLLECTION");
+            setHeroText("Naruto\nCollection");
             setTextAnimation(true);
             setNarutoStep(1);
             setActiveCollection(1);
@@ -321,7 +401,7 @@ function ShopNow() {
           setTimeout(() => {
             setShowViku94(false);
             setShowViku95(false);
-            setHeroText("ONE PIECE COLLECTION");
+            setHeroText("One Piece\nCollection");
             setTextAnimation(true);
             setNarutoStep(0);
             setOnePieceStep(1);
@@ -337,15 +417,32 @@ function ShopNow() {
       } else if (onePieceStep === 3) {
         timers.push(
           setTimeout(() => {
-            setHeroText("Jujutsu Kaisen & Demon Slayer Collection");
+            setHeroText("Demon Slayer\nCollection");
             setTextAnimation(true);
             setOnePieceStep(0);
-            setJujutsuStep(1);
+            setDemonSlayerStep(1);
             setActiveCollection(3);
           }, 3000)
         );
       }
     } else if (activeCollection === 3) {
+      if (demonSlayerStep === 1) {
+        if (demonSlayerGif === "gif1") {
+          timers.push(setTimeout(() => setDemonSlayerGif("gif2"), 1500));
+        } else if (demonSlayerGif === "gif2") {
+          timers.push(setTimeout(() => setDemonSlayerGif("gif3"), 3500));
+        } else if (demonSlayerGif === "gif3") {
+          timers.push(setTimeout(() => {
+            setDemonSlayerGif("gif1");
+            setHeroText("Jujutsu Kaisen\nCollection");
+            setTextAnimation(true);
+            setDemonSlayerStep(0);
+            setJujutsuStep(1);
+            setActiveCollection(4);
+          }, 3000));
+        }
+      }
+    } else if (activeCollection === 4) {
       if (jujutsuStep === 1) {
         timers.push(
           setTimeout(() => {
@@ -354,26 +451,22 @@ function ShopNow() {
           }, 3000)
         );
       } else if (jujutsuStep === 2) {
-        timers.push(setTimeout(() => setJujutsuStep(3), 3000));
+        timers.push(
+          setTimeout(() => {
+            setHeroText("Solo Leveling\nCollection");
+            setTextAnimation(true);
+            setJujutsuStep(0);
+            setShowViku87(false);
+            setCurrentMedia("video");
+            setActiveCollection(0);
+          }, 3000)
+        );
       }
     }
     return () => timers.forEach(clearTimeout);
-  }, [activeCollection, currentMedia, narutoStep, onePieceStep, jujutsuStep]);
+  }, [activeCollection, currentMedia, narutoStep, onePieceStep, jujutsuStep, demonSlayerStep, demonSlayerGif]);
 
-  // Swipe handlers for edition slider
   const swipeHandlers = useSwipeable({
-    onSwiping: ({ deltaX }) => {
-      if (editionSliderRef.current) {
-        const slick = editionSliderRef.current;
-        const currentSlide = slick.innerSlider.state.currentSlide;
-        const totalSlides = editionItems.length - itemsPerSlide;
-        if ((deltaX > 0 && currentSlide === 0) || (deltaX < 0 && currentSlide >= totalSlides)) {
-          return;
-        }
-        const translateX = deltaX * -0.5;
-        slick.innerSlider.list.style.transform = `translate3d(${translateX}px, 0, 0)`;
-      }
-    },
     onSwipedLeft: () => {
       if (editionSliderRef.current) {
         editionSliderRef.current.slickNext();
@@ -384,131 +477,13 @@ function ShopNow() {
         editionSliderRef.current.slickPrev();
       }
     },
-    onSwiped: () => {
-      if (editionSliderRef.current) {
-        editionSliderRef.current.innerSlider.list.style.transition = "transform 0.3s ease-in-out";
-        editionSliderRef.current.innerSlider.list.style.transform = "";
-      }
-    },
     delta: 10,
     preventDefaultTouchmoveEvent: true,
     trackTouch: true,
     trackMouse: true,
   });
 
-  const MemoizedCollectibleItem = React.memo(({ item }) => (
-    <div className="collectible-item" style={{ transform: "translateZ(0)" }}>
-      <div className="image-blur-wrapper">
-        <img src={item.image} alt={item.name} className="collectible-image" loading="lazy" style={{ transform: "translateZ(0)" }} />
-      </div>
-      <div className="collectible-info product-info">
-        <span className="rating" style={{ textShadow: "0 0 2px rgba(0, 0, 0, 0.3)" }}>{item.rating}</span>
-        <p className="title">{item.name}</p>
-        <p className="price">
-          {item.priceNaira} / <img src={item.vikuImage} alt="Viku Currency" className="viku-currency" /> {item.priceViku}
-        </p>
-        <button className="add-to-cart" onClick={() => handleAddToCart(item)}>
-          Add to cart
-        </button>
-      </div>
-    </div>
-  ));
-
-  const MemoizedAnimeHoodieItem = React.memo(({ item }) => (
-    <div className="anime-hoodies-item" style={{ transform: "translateZ(0)" }}>
-      <div className="anime-hoodies-wrapper">
-        <div className="image-blur-wrapper">
-          <img src={item.image} alt={item.name} className="anime-hoodies-image" loading="lazy" style={{ transform: "translateZ(0)" }} />
-        </div>
-        <div className="anime-hoodies-info product-info">
-          <span className="rating" style={{ textShadow: "0 0 2px rgba(0, 0, 0, 0.3)" }}>{item.rating}</span>
-          <p className="title">{item.name}</p>
-          <p className="price">
-            {item.priceNaira} / <img src={item.vikuImage} alt="Viku Currency" className="viku-currency" /> {item.priceViku}
-          </p>
-          <button className="add-to-cart" onClick={() => handleAddToCart(item)}>
-            Add to cart
-          </button>
-        </div>
-      </div>
-    </div>
-  ));
-
-  const MemoizedTopShelfItem = React.memo(({ item }) => (
-    <div className="product-item">
-      <div className="product-wrapper" onClick={() => handleAddToCart(item)}>
-        <div className="product-image">
-          <div className="image-slider">
-            {item.images.map((img, imgIdx) => (
-              <div key={imgIdx} className="image-blur-wrapper">
-                <img src={img} alt={`${item.name}-${imgIdx}`} loading="lazy" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="product-info">
-        <span className="rating" style={{ textShadow: "0 0 2px rgba(0, 0, 0, 0.3)" }}>{item.rating}</span>
-        <p className="title">{item.name}</p>
-        <p className="price">
-          {item.priceNaira} / <img src={item.vikuImage} alt="Viku Currency" className="viku-currency" /> {item.priceViku}
-        </p>
-        <button className="add-to-cart" onClick={() => handleAddToCart(item)}>
-          Add to cart
-        </button>
-      </div>
-    </div>
-  ));
-
-  const MemoizedEditionItem = React.memo(({ item }) => (
-    <div className="edition-item" style={{ transform: "translateZ(0)" }}>
-      <div className="edition-wrapper">
-        <div className="image-blur-wrapper">
-          <img src={item.img} alt={item.name} className="edition-image" loading="lazy" style={{ transform: "translateZ(0)" }} />
-        </div>
-        <div className="edition-info product-info">
-          <span className="rating" style={{ textShadow: "0 0 2px rgba(0, 0, 0, 0.3)" }}>{item.rating}</span>
-          <p className="title">{item.name}</p>
-          <p className="price">
-            {item.priceNaira} / <img src={item.vikuImage} alt="Viku Currency" className="viku-currency" /> {item.priceViku}
-          </p>
-          <button className="add-to-cart" onClick={() => handleAddToCart(item)}>
-            Add to cart
-          </button>
-        </div>
-      </div>
-    </div>
-  ));
-
   const slickSettings = useMemo(
-    () => ({
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: itemsPerSlide,
-      slidesToScroll: itemsPerSlide,
-      autoplay: true,
-      autoplaySpeed: window.innerWidth > 768 ? 4000 : 3000,
-      pauseOnHover: true,
-      pauseOnDotsHover: true,
-      pauseOnFocus: true,
-      swipeToSlide: true,
-      touchThreshold: 10,
-      cssEase: "ease-in-out",
-      arrows: false,
-      appendDots: (dots) => (
-        <div>
-          <ul className="slider-dots">{dots}</ul>
-        </div>
-      ),
-      customPaging: (i) => (
-        <button className="slider-dot" aria-label={`Go to slide ${i + 1}`}></button>
-      ),
-    }),
-    [itemsPerSlide]
-  );
-
-  const editionSlickSettings = useMemo(
     () => ({
       dots: true,
       infinite: false,
@@ -537,55 +512,116 @@ function ShopNow() {
     [itemsPerSlide]
   );
 
-  return (
-    <div className="shopnow-page" style={{ minHeight: "calc(100vh + 300px)" }}>
-      <div className="content">
-        <div className="header-container">
-          <div className="header-logo">
-            <img src={viku46} alt="Header Logo" loading="lazy" />
+  const MemoizedTopShelfItem = React.memo(({ item }) => (
+    <div className="product-item">
+      <div className="product-wrapper" onClick={() => handleAddToCart(item)}>
+        <div className="product-image">
+          <div className="image-slider">
+            {item.images.map((img, imgIdx) => (
+              <div key={imgIdx} className="image-blur-wrapper">
+                <img src={img} alt={`${item.name}-${imgIdx}`} loading="lazy" />
+              </div>
+            ))}
           </div>
-          <button className="cart-btn nav-btn-blur" onClick={toggleCart}>
-            <FontAwesomeIcon icon={faShoppingBag} />
-            {cartItems.length > 0 && <span className="cart-count">{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</span>}
+        </div>
+      </div>
+      <div className="product-info">
+        <span className="rating" style={{ textShadow: "0 0 2px rgba(0, 0, 0, 0.3)" }}>
+          {item.rating}
+        </span>
+        <p className="title" style={{ fontFamily: "'Noto Sans', sans-serif", color: "#000000" }}>
+          {item.name}
+        </p>
+        <p className="price" style={{ fontFamily: "'Dancing Script', cursive", color: "#008000" }}>
+          {item.priceNaira} /{" "}
+          <img src={item.vikuImage} alt="Viku Currency" className="viku-currency" />{" "}
+          {item.priceViku}
+        </p>
+        <button className="add-to-cart" onClick={() => handleAddToCart(item)}>
+          Add to cart
+        </button>
+      </div>
+    </div>
+  ));
+
+  const MemoizedEditionItem = React.memo(({ item }) => (
+    <div className="edition-item" style={{ transform: "translateZ(0)" }}>
+      <div className="edition-wrapper">
+        <div className="image-blur-wrapper">
+          <img
+            src={item.img}
+            alt={item.name}
+            className="edition-image"
+            loading="lazy"
+            style={{ transform: "translateZ(0)" }}
+          />
+        </div>
+        <div className="edition-info product-info">
+          <span className="rating" style={{ textShadow: "0 0 2px rgba(0, 0, 0, 0.3)" }}>
+            {item.rating}
+          </span>
+          <p className="title" style={{ fontFamily: "'Noto Sans', sans-serif", color: "#000000" }}>
+            {item.name}
+          </p>
+          <p className="price" style={{ fontFamily: "'Dancing Script', cursive", color: "#008000" }}>
+            {item.priceNaira} /{" "}
+            <img src={item.vikuImage} alt="Viku Currency" className="viku-currency" />{" "}
+            {item.priceViku}
+          </p>
+          <button className="add-to-cart" onClick={() => handleAddToCart(item)}>
+            Add to cart
           </button>
         </div>
-        <div className="nav-bar nav-blur">
-          <Link to="/" className="home-btn nav-btn-blur">
+      </div>
+    </div>
+  ));
+
+  return (
+    <div className="shopnow-page" style={{ minHeight: "calc(100vh + 300px)" }}>
+      <div className="header-logo">
+        <img src={viku46} alt="Header Logo" loading="lazy" />
+      </div>
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        <HiMenuAlt3 className="sidebar-icon" />
+      </button>
+      <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+        <div className="sidebar-logo-wrapper">
+          <img src={viku14} alt="Sidebar Logo" className="sidebar-logo" />
+        </div>
+        <Link to="/" className="nav-link">Home</Link>
+        <Link to="/shop" className="nav-link">Shop</Link>
+        <Link to="/community" className="nav-link">Community</Link>
+        <div className="sidebar-nav-icons">
+          <Link to="/" className="nav-btn-blur sidebar-nav-btn">
             <FontAwesomeIcon icon={faHome} />
           </Link>
-          <button className="cart-btn nav-btn-blur" onClick={toggleCart}>
-            <FontAwesomeIcon icon={faShoppingBag} />
-            {cartItems.length > 0 && <span className="cart-count">{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</span>}
+          <button className="nav-btn-blur sidebar-nav-btn">
+            <FontAwesomeIcon icon={faCompass} />
           </button>
-          <div className="header-logo">
-            <img src={viku46} alt="Header Logo" loading="lazy" />
-          </div>
-          <button className="like-btn nav-btn-blur">
+          <button className="nav-btn-blur sidebar-nav-btn">
             <FontAwesomeIcon icon={faHeart} />
           </button>
-          <button className="profile-btn nav-btn-blur">
+          <button className="nav-btn-blur sidebar-nav-btn">
+            <FontAwesomeIcon icon={faMessage} />
+          </button>
+          <button className="nav-btn-blur sidebar-nav-btn">
             <img src={viku100} alt="Profile" loading="lazy" />
           </button>
         </div>
+      </div>
+      <div className="cart-btn-container">
+        <button className="cart-btn nav-btn-blur" onClick={toggleCart}>
+          <BsCart4 className="cart-icon" />
+          {cartItems.length > 0 && (
+            <span className="cart-count">
+              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+            </span>
+          )}
+        </button>
+      </div>
+      <div className="content">
         {showCart && (
           <div className="cart-dropdown">
-            {cartItems.length >= 4 && (
-              <img
-                src={viku101}
-                alt="Cart Background GIF"
-                className="cart-background-gif"
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  zIndex: -1,
-                }}
-              />
-            )}
             <div className="cart-content">
               <h3>Your Cart</h3>
               {cartItems.length === 0 ? (
@@ -619,7 +655,11 @@ function ShopNow() {
                       </div>
                       <span className="cart-item-price">
                         {item.priceNaira} x {item.quantity} /{" "}
-                        <img src={item.vikuImage} alt="Viku Currency" className="viku-currency" />{" "}
+                        <img
+                          src={item.vikuImage}
+                          alt="Viku Currency"
+                          className="viku-currency"
+                        />{" "}
                         {(parseFloat(item.priceViku) * item.quantity).toFixed(0)}
                       </span>
                     </div>
@@ -627,12 +667,20 @@ function ShopNow() {
                   <div className="cart-total">
                     <span>Total:</span>
                     <span>
-                      {calculateTotal().nairaTotal} / <img src={viku100} alt="Viku Currency" className="viku-currency" />{" "}
+                      {calculateTotal().nairaTotal} /{" "}
+                      <img
+                        src={viku100}
+                        alt="Viku Currency"
+                        className="viku-currency"
+                      />{" "}
                       {calculateTotal().vikuTotal}
                     </span>
                   </div>
                   <div className="cart-buttons">
-                    <button className="clear-cart-btn" onClick={() => setCartItems([])}>
+                    <button
+                      className="clear-cart-btn"
+                      onClick={() => setCartItems([])}
+                    >
                       Clear Cart
                     </button>
                     <button className="checkout-btn" onClick={handleCheckout}>
@@ -644,13 +692,34 @@ function ShopNow() {
             </div>
           </div>
         )}
-        <div className="search-wrapper">
+        <div
+          className={`search-wrapper ${isSearchVisible ? "visible" : "hidden"} ${
+            isSearchFocused ? "active" : ""
+          }`}
+          ref={searchWrapperRef}
+        >
+          <button className="message-btn">
+            <FontAwesomeIcon icon={faMessage} />
+          </button>
           <div className="search-bar">
             <FontAwesomeIcon icon={faSearch} className="search-icon" />
-            <input type="text" placeholder="Search products..." />
+            <input
+              type="text"
+              placeholder="Search products..."
+              onFocus={handleSearchFocus}
+              onBlur={handleSearchBlur}
+            />
           </div>
           <button className="filter-btn">
             <FontAwesomeIcon icon={faSlidersH} />
+          </button>
+          <button className="cart-btn" onClick={toggleCart}>
+            <BsCart4 className="cart-icon" />
+            {cartItems.length > 0 && (
+              <span className="cart-count">
+                {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+              </span>
+            )}
           </button>
         </div>
         <div className="hero-section">
@@ -667,13 +736,31 @@ function ShopNow() {
             </video>
           )}
           {activeCollection === 0 && currentMedia === "gif1" && (
-            <img src={viku88} alt="gif1" className="hero-media" loading="lazy" key="gif1" />
+            <img
+              src={viku88}
+              alt="gif1"
+              className="hero-media"
+              loading="lazy"
+              key="gif1"
+            />
           )}
           {activeCollection === 0 && currentMedia === "gif2" && (
-            <img src={viku84} alt="gif2" className="hero-media" loading="lazy" key="gif2" />
+            <img
+              src={viku84}
+              alt="gif2"
+              className="hero-media"
+              loading="lazy"
+              key="gif2"
+            />
           )}
           {activeCollection === 0 && currentMedia === "gif3" && (
-            <img src={viku82} alt="gif3" className="hero-media" loading="lazy" key="gif3" />
+            <img
+              src={viku82}
+              alt="gif3"
+              className="hero-media"
+              loading="lazy"
+              key="gif3"
+            />
           )}
           {activeCollection === 1 && narutoStep === 1 && (
             <img
@@ -710,10 +797,22 @@ function ShopNow() {
             />
           )}
           {activeCollection === 1 && narutoStep === 3 && showViku94 && (
-            <img src={viku94} alt="viku94" className="hero-png-right" loading="lazy" key="viku94" />
+            <img
+              src={viku94}
+              alt="viku94"
+              className="hero-png-right"
+              loading="lazy"
+              key="viku94"
+            />
           )}
           {activeCollection === 1 && narutoStep === 3 && showViku95 && (
-            <img src={viku95} alt="viku95" className="hero-png-left" loading="lazy" key="viku95" />
+            <img
+              src={viku95}
+              alt="viku95"
+              className="hero-png-left"
+              loading="lazy"
+              key="viku95"
+            />
           )}
           {activeCollection === 2 && onePieceStep === 1 && (
             <img
@@ -766,7 +865,65 @@ function ShopNow() {
               key="onepiece-step-3"
             />
           )}
-          {activeCollection === 3 && jujutsuStep === 1 && (
+          {activeCollection === 3 && demonSlayerStep === 1 && demonSlayerGif === "gif1" && (
+            <img
+              src={viku121}
+              alt="viku121"
+              className="hero-media demon-slayer-gif"
+              loading="lazy"
+              style={{
+                zIndex: 2,
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%) translateZ(0)",
+                objectFit: window.innerWidth > 768 ? "contain" : "cover",
+              }}
+              key="demon-slayer-gif1"
+            />
+          )}
+          {activeCollection === 3 && demonSlayerStep === 1 && demonSlayerGif === "gif2" && (
+            <img
+              src={viku122}
+              alt="viku122"
+              className="hero-media demon-slayer-gif"
+              loading="lazy"
+              style={{
+                zIndex: 2,
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%) translateZ(0)",
+                objectFit: window.innerWidth > 768 ? "contain" : "cover",
+              }}
+              key="demon-slayer-gif2"
+            />
+          )}
+          {activeCollection === 3 && demonSlayerStep === 1 && demonSlayerGif === "gif3" && (
+            <img
+              src={viku123}
+              alt="viku123"
+              className="hero-media demon-slayer-gif"
+             Robin
+              loading="lazy"
+              style={{
+                zIndex: 2,
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%) translateZ(0)",
+                objectFit: window.innerWidth > 768 ? "contain" : "cover",
+              }}
+              key="demon-slayer-gif3"
+            />
+          )}
+          {activeCollection === 4 && jujutsuStep === 1 && (
             <img
               src={viku86}
               alt="viku86"
@@ -783,7 +940,7 @@ function ShopNow() {
               key="jujutsu-step-1"
             />
           )}
-          {activeCollection === 3 && jujutsuStep >= 2 && showViku87 && (
+          {activeCollection === 4 && jujutsuStep >= 2 && showViku87 && (
             <>
               <img
                 src={viku87}
@@ -812,9 +969,25 @@ function ShopNow() {
               />
             </>
           )}
-          <h1 className={textAnimation ? "hero-text-animate" : ""}>{heroText}</h1>
+          <h1 className={textAnimation ? "hero-text-animate" : ""} style={{
+            fontFamily: "'Russo One', sans-serif",
+            color: activeCollection === 0 ? "#ADD8E6" : // Light whitish blue for Solo Leveling
+                   activeCollection === 1 ? "#FFFF00" : // Yellow for Naruto
+                   activeCollection === 2 ? "#D2B48C" : // Skin brown for One Piece
+                   activeCollection === 3 ? "#FFA500" : // Orange for Demon Slayer
+                   activeCollection === 4 ? "#87CEEB" : "#FFFFFF", // Light blue for Jujutsu Kaisen
+            textShadow: activeCollection === 0 ? "0 0 10px #FFFFFF, 0 0 20px #FFFFFF" :
+                        activeCollection === 1 ? "0 0 10px #FF4500, 0 0 20px #FF4500" :
+                        activeCollection === 2 ? "0 0 10px #FF0000, 0 0 20px #FF0000" :
+                        activeCollection === 3 ? "0 0 10px #FFFFFF, 0 0 20px #FFFFFF" :
+                        activeCollection === 4 ? "0 0 10px #FFFACD, 0 0 20px #FFFACD" : "none",
+            animation: textAnimation ? "fadeInText 1s ease-in-out forwards, textGlow 2s ease-in-out infinite alternate" : "none"
+          }}>
+            {heroText}
+          </h1>
+          <button className="shop-now-btn">Shop Now</button>
           <div className="slick-dots">
-            {["Solo Leveling", "Naruto", "One Piece", "Jujutsu Kaisen & Demon Slayer"].map(
+            {["Solo Leveling", "Naruto", "One Piece", "Demon Slayer", "Jujutsu Kaisen"].map(
               (collection, index) => (
                 <button
                   key={`collection-${index}`}
@@ -825,6 +998,23 @@ function ShopNow() {
               )
             )}
           </div>
+        </div>
+        <div className="nav-bar nav-blur">
+          <Link to="/" className="home-btn nav-btn-blur">
+            <FontAwesomeIcon icon={faHome} />
+          </Link>
+          <button className="compass-btn nav-btn-blur">
+            <FontAwesomeIcon icon={faCompass} />
+          </button>
+          <div className="nav-logo-btn nav-btn-blur">
+            <img src={viku46} alt="Header Logo" loading="lazy" />
+          </div>
+          <button className="like-btn nav-btn-blur">
+            <FontAwesomeIcon icon={faHeart} />
+          </button>
+          <button className="profile-btn nav-btn-blur">
+            <img src={viku100} alt="Profile" loading="lazy" />
+          </button>
         </div>
         <div className="quick-categories">
           <div className="quick-categories-header">
@@ -839,7 +1029,10 @@ function ShopNow() {
               { name: "Stickers & Posters", img: viku52 },
             ].map((cat, idx) => (
               <div key={`category-${idx}`} className="category-wrapper">
-                <div className="category-item" style={{ backgroundImage: `url(${cat.img})` }}>
+                <div
+                  className="category-item"
+                  style={{ backgroundImage: `url(${cat.img})` }}
+                >
                   {cat.name}
                 </div>
               </div>
@@ -847,33 +1040,40 @@ function ShopNow() {
           </div>
         </div>
         <div className="top-shelf" ref={topShelfRef}>
-          <div className="top-shelf-header">
+          <div className="top-shelf-header" ref={topShelfHeaderRef}>
+            <img
+              src={viku45}
+              alt="Glass Ball"
+              className="glass-ball"
+              style={{ left: `${glassBallPosition.left}px` }}
+            />
             <div className="header-wrapper top-shelf-title">
-              <h1 onClick={() => handleHeaderClick("top-shelf")}>Top Shelf</h1>
-              {activeSection === "top-shelf" && (
-                <img src={viku45} alt="Bubble" className="water-bubble" loading="lazy" />
-              )}
+              <h2
+                ref={topShelfH2Ref}
+                className={activeSection === "top-shelf" ? "active" : "blurred"}
+                onClick={() => handleHeaderClick("top-shelf")}
+              >
+                Top Shelf
+              </h2>
             </div>
             <div className="header-wrapper limited-title">
-              <h1 onClick={() => handleHeaderClick("limited")}>Limited</h1>
-              {activeSection === "limited" && (
-                <img src={viku45} alt="Bubble" className="water-bubble" loading="lazy" />
-              )}
+              <h2
+                ref={limitedH2Ref}
+                className={activeSection === "limited" ? "active" : "blurred"}
+                onClick={() => handleHeaderClick("limited")}
+              >
+                Limited
+              </h2>
             </div>
             <div className="header-wrapper collectibles-title">
-              <h1 onClick={() => handleHeaderClick("collectibles")}>Collectibles</h1>
-              {activeSection === "collectibles" && (
-                <img src={viku45} alt="Bubble" className="water-bubble" loading="lazy" />
-              )}
+              <h2
+                ref={collectiblesH2Ref}
+                className={activeSection === "collectibles" ? "active" : "blurred"}
+                onClick={() => handleHeaderClick("collectibles")}
+              >
+                Collectibles
+              </h2>
             </div>
-            {activeSection === null && (
-              <img
-                src={viku45}
-                alt="Bubble"
-                className="water-bubble float-edge-to-edge"
-                loading="lazy"
-              />
-            )}
           </div>
           {activeSection === "top-shelf" && (
             <div className="product-grid">
@@ -885,7 +1085,7 @@ function ShopNow() {
           {activeSection === "limited" && (
             <div className="edition" ref={editionSliderRef}>
               <div {...swipeHandlers}>
-                <Slider {...editionSlickSettings} className="edition-slider">
+                <Slider {...slickSettings} className="edition-slider">
                   {editionItems.map((item) => (
                     <MemoizedEditionItem key={item.id} item={item} />
                   ))}
@@ -893,23 +1093,16 @@ function ShopNow() {
               </div>
             </div>
           )}
-          {activeSection === "collectibles" && (
-            <div className="collectibles-section" ref={collectiblesRef}>
-              <Slider {...slickSettings} className="collectibles-slider">
-                {collectiblesItems.map((item) => (
-                  <MemoizedCollectibleItem key={item.id} item={item} />
-                ))}
-              </Slider>
-            </div>
-          )}
-        </div>
-        <div className="anime-hoodies" ref={animeHoodiesRef} style={{ minHeight: "600px" }}>
-          <h2 className="anime-hoodies-title">Anime Hoodies</h2>
-          <Slider {...slickSettings} className="anime-hoodies-slider">
-            {animeHoodiesItems.map((item) => (
-              <MemoizedAnimeHoodieItem key={item.id} item={item} />
-            ))}
-          </Slider>
+          <ShopNow2
+            activeSection={activeSection}
+            collectiblesRef={collectiblesRef}
+            newReleaseRef={newReleaseRef}
+            animeHoodiesRef={animeHoodiesRef}
+            itemsPerSlide={itemsPerSlide}
+            handleAddToCart={handleAddToCart}
+            cleanRating={cleanRating}
+            generateIds={generateIds}
+          />
         </div>
       </div>
     </div>

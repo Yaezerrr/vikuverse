@@ -5,6 +5,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap');
 
+/* Define wrapper padding and margin as CSS variables */
+:root {
+  --wrapper-padding: 8px; /* Match mobile for consistency */
+  --wrapper-margin: 20px;
+}
+
 /* Content Wrapper */
 .shopnow2-content {
   display: flex;
@@ -801,7 +807,7 @@
   margin: 5px 0;
   color: #1a1a1a;
   font-size: 1rem;
-  font-family: 'Comic Sans MS', cursive; /* Changed to Comic Sans for manga titles */
+  font-family: 'Comic Sans MS', cursive;
   font-weight: 700;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -868,6 +874,480 @@
 .new-release-info .add-to-cart:hover,
 .manga-info .add-to-cart:hover {
   background: #e03e00;
+}
+
+/* Curated Section */
+.curated-section {
+  margin-bottom: 20px;
+  margin-top: 80px;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.curated-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  background: transparent;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 2;
+}
+
+.curated-header h2 {
+  font-size: 1.3rem;
+  color: #666;
+  margin: 0;
+  cursor: pointer;
+  transition: color 3s ease, filter 3s ease, transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 700;
+  filter: blur(2px);
+  padding: 0 4px;
+}
+
+.curated-header h2.active {
+  color: #000;
+  filter: none;
+  transform: scale(1.1);
+  z-index: 3;
+}
+
+.header-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  overflow: visible;
+  padding: 0 4px;
+}
+
+.featured-title {
+  justify-content: flex-start;
+}
+
+.most-wanted-title {
+  justify-content: flex-end;
+}
+
+.glass-ball {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 80px;
+  z-index: 2;
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+/* Product Grid for Curated Items */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.curated-item {
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  background: transparent;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.curated-wrapper {
+  width: 100%;
+  height: 230px;
+  background: transparent;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.curated-wrapper:hover {
+  transform: translateZ(20px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.curated-image {
+  width: 100%;
+  height: 210px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-x;
+}
+
+.curated-info {
+  text-align: center;
+  margin-top: 10px;
+  background: transparent;
+  backdrop-filter: blur(5px);
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.curated-info .rating {
+  display: block;
+  margin-bottom: 5px;
+  color: #ffd700;
+  font-size: 0.9rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 500;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.curated-info .title {
+  margin: 5px 0;
+  color: #000000; /* Dark black for curated titles */
+  font-size: 1rem;
+  font-family: 'EB Garamond', serif; /* Changed to Garamond */
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.curated-info .price {
+  color: #006400; /* Dark money green for curated prices */
+  font-size: 1rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 600;
+}
+
+.curated-info .price img.viku-currency {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.curated-info .add-to-cart {
+  padding: 5px 10px;
+  background: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  z-index: 5;
+  position: relative;
+}
+
+.curated-info .add-to-cart:hover {
+  background: #e03e00;
+}
+
+/* Highlight and About Wrapper */
+.highlight-about-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 var(--wrapper-padding);
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Highlight Container */
+.highlight-container {
+  width: 100%;
+  max-width: 1200px;
+  height: 100px;
+  background: #000;
+  border-radius: 12px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.highlight-text {
+  flex: 1;
+  color: #fff;
+  font-size: 1.5rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 600;
+  text-align: left;
+  padding-left: 20px;
+  line-height: 1.4;
+}
+
+.email-container {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 300px;
+  height: 50px;
+}
+
+.email-text {
+  color: #333;
+  font-size: 1rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 500;
+}
+
+.email-button {
+  padding: 5px 15px;
+  background: #000;
+  color: #bcabab;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.email-button:hover {
+  background: #333;
+}
+
+/* About Container */
+.about-container {
+  width: 100vw;
+  height: 500px; /* Increased height to accommodate new footer links */
+  background: rgb(19, 37, 60);
+  position: relative;
+  z-index: 1;
+  margin-top: -50px;
+  margin-left: calc(-1 * var(--wrapper-margin));
+  left: calc(-1 * var(--wrapper-padding));
+  right: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.about-logo {
+  width: 100px;
+  height: auto;
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  z-index: 3;
+}
+
+.about-title {
+  color: #ffd6d6;
+  font-size: 1.5rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 700;
+  margin: 0;
+  position: absolute;
+  top: 90px;
+  left: 20px;
+  z-index: 2;
+}
+
+.merchandise-title {
+  color: #ffd6d6;
+  font-size: 1.5rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 700;
+  margin: 0;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.about-us-title {
+  color: #ffd6d6;
+  font-size: 1.5rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 700;
+  margin: 0;
+  position: absolute;
+  top: 50px;
+  right: 200px;
+  z-index: 2;
+}
+
+.about-text {
+  color: #ffdfdf;
+  font-size: 0.5rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  position: absolute;
+  top: 120px;
+  left: 20px;
+  z-index: 1;
+  max-width: 400px;
+}
+
+.anime-list {
+  color: #ffdfdf;
+  font-size: 0.9rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  max-width: 400px;
+  transition: color 0.3s ease; /* Added hover transition */
+}
+
+.anime-list:hover {
+  color: #ff4500; /* Hover color matches existing button hover for consistency */
+}
+
+.about-us-list {
+  color: #ffdfdf;
+  font-size: 0.9rem; /* Same font size as anime-list */
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  position: absolute;
+  top: 80px;
+  right: 150px;
+  z-index: 1;
+  max-width: 400px;
+  transition: color 0.3s ease; /* Added hover transition */
+}
+
+.about-us-list:hover {
+  color: #ff4500; /* Hover color matches existing button hover for consistency */
+}
+
+.footer-links {
+  display: flex; /* Changed to flex for horizontal layout */
+  gap: 20px; /* Space between links */
+  color: #ffdfdf; /* Changed to match anime-list color */
+  font-size: 0.9rem; /* Same font size as anime-list */
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  position: absolute;
+  top: 450px;
+  left: 70%;
+  transform: translateX(-50%);
+  z-index: 1;
+  max-width: 400px;
+}
+
+.footer-link {
+  color: #ffdfdf; /* Ensure individual links match anime-list color */
+  text-decoration: none;
+  transition: color 0.3s ease; /* Smooth transition for hover */
+}
+
+.footer-link:hover {
+  color: #ff4500; /* Hover color matches existing button hover for consistency */
+}
+
+.contact-text {
+  color: #ffdfdf;
+  font-size: 0.5rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  position: absolute;
+  top: 370px;
+  left: 20px;
+  z-index: 0;
+  max-width: 400px;
+}
+
+.app-buttons-container {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 420px;
+  left: 20px;
+  z-index: 0;
+}
+
+.app-store-button,
+.google-play-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: #000;
+  color: #bcabab;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  width: 140px;
+  height: 30px;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.app-store-button:hover,
+.google-play-button:hover {
+  background: #333;
+}
+
+.app-icon {
+  font-size: 1rem;
+}
+
+.copyright-text {
+  color: #ffdfdf;
+  font-size: 0.7rem;
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 400;
+  line-height: 2;
+  margin: 0;
+  position: absolute;
+  top: 460px;
+  left: 20px;
+  z-index: 0;
+  max-width: 500px;
 }
 
 /* Slider Dots */
@@ -1053,7 +1533,7 @@
   }
 
   .video-button-left {
-    right:30px;
+    right: 30px;
   }
 
   .video-button-right {
@@ -1193,7 +1673,7 @@
 
   .manga-info .title {
     font-size: 0.9rem;
-    font-family: 'Comic Sans MS', cursive; /* Apply Comic Sans in responsive */
+    font-family: 'Comic Sans MS', cursive;
   }
 
   .anime-hoodies-info .title {
@@ -1301,6 +1781,236 @@
 
   .action-count {
     font-size: 0.8rem;
+  }
+
+  .curated-section {
+    margin-bottom: 40px;
+    margin-top: 40px;
+    padding: 0 8px;
+  }
+
+  .curated-header {
+    padding: 6px 8px;
+  }
+
+  .curated-header h2 {
+    font-size: 1rem;
+    color: #666;
+    filter: blur(1.5px);
+    padding: 0 4px;
+    transition: color 3s ease, filter 3s ease, transform 0.3s ease;
+  }
+
+  .curated-header h2.active {
+    color: #000;
+    filter: none;
+    transform: scale(1.1);
+    z-index: 3;
+  }
+
+  .header-wrapper {
+    overflow: visible;
+    padding: 0 4px;
+  }
+
+  .glass-ball {
+    width: 180px;
+    height: 60px;
+    transition: left 0.5s ease;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .curated-wrapper {
+    height: 200px;
+  }
+
+  .curated-image {
+    height: 190px;
+  }
+
+  .curated-info .rating {
+    font-size: 0.8rem;
+  }
+
+  .curated-info .title {
+    font-size: 0.9rem;
+    color: #000000; /* Dark black for curated titles in mobile */
+    font-family: 'EB Garamond', serif; /* Garamond in mobile */
+  }
+
+  .curated-info .price {
+    font-size: 0.8rem;
+    color: #006400; /* Dark money green in mobile */
+  }
+
+  .curated-info .add-to-cart {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+
+  .highlight-about-wrapper {
+    margin: 20px auto;
+    padding: 0 var(--wrapper-padding);
+  }
+
+  .highlight-container {
+    margin: 0;
+    padding: 0 8px;
+    height: 65px;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .highlight-text {
+    font-size: 0.6rem;
+    padding-left: 10px;
+    line-height: 1.2;
+  }
+
+  .email-container {
+    width: 190px;
+    height: 30px;
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .email-text {
+    font-size: 0.8rem;
+  }
+
+  .email-button {
+    padding: 4px 10px;
+    font-size: 0.6rem;
+  }
+
+  .about-container {
+    margin-top: -32.5px;
+    margin-left: calc(-1 * var(--wrapper-margin));
+    left: calc(-1 * var(--wrapper-padding));
+    right: 0;
+    padding: 15px;
+    height: 480px; /* Adjusted for mobile */
+  }
+
+  .about-logo {
+    width: 80px;
+    top: 50px;
+    left: 15px;
+    z-index: 3;
+  }
+
+  .about-title {
+    font-size: 0.7rem;
+    top: 90px;
+    left: 27px;
+    z-index: 2;
+  }
+
+  .merchandise-title {
+    font-size: 0.7rem;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  .about-us-title {
+    font-size: 0.7rem;
+    top: 50px;
+    right: 49px;
+    z-index: 2;
+  }
+
+  .about-text {
+    font-size: 0.4rem;
+    top: 110px;
+    left: 27px;
+    z-index: 1;
+    max-width: 300px;
+  }
+
+  .anime-list {
+    font-size: 0.6rem;
+    top: 70px;
+    left: 55%;
+    transform: translateX(-50%);
+    z-index: 1;
+    max-width: 300px;
+    transition: color 0.3s ease; /* Added hover transition */
+  }
+
+  .anime-list:hover {
+    color: #ff4500; /* Hover color matches existing button hover for consistency */
+  }
+
+  .about-us-list {
+    font-size: 0.6rem; /* Same font size as anime-list in mobile */
+    top: 70px;
+    right: 16px;
+    z-index: 1;
+    max-width: 300px;
+    transition: color 0.3s ease; /* Added hover transition */
+  }
+
+  .about-us-list:hover {
+    color: #ff4500; /* Hover color matches existing button hover for consistency */
+  }
+
+  .footer-links {
+    font-size: 0.6rem; /* Same font size as anime-list in mobile */
+    top: 360px;
+    left: 55%;
+    transform: translateX(-50%);
+    z-index: 1;
+    max-width: 300px;
+    gap: 15px; /* Adjusted gap for mobile */
+  }
+
+  .footer-link {
+    color: #ffdfdf; /* Ensure individual links match anime-list color */
+    text-decoration: none;
+    transition: color 0.3s ease; /* Smooth transition for hover */
+  }
+
+  .footer-link:hover {
+    color: #ff4500; /* Hover color matches existing button hover for consistency */
+  }
+
+  .contact-text {
+    font-size: 0.4rem;
+    top: 350px;
+    left: 27px;
+    z-index: 0;
+    max-width: 300px;
+  }
+
+  .app-buttons-container {
+    top: 400px;
+    left: 27px;
+    gap: 5px;
+  }
+
+  .app-store-button,
+  .google-play-button {
+    width: 100px;
+    height: 25px;
+    font-size: 0.6rem;
+    padding: 4px 8px;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+
+  .app-icon {
+    font-size: 0.8rem;
+  }
+
+  .copyright-text {
+    font-size: 0.5rem;
+    top: 440px;
+    left: 17px;
+    max-width: 350px;
   }
 
   .events-slider .slick-track {

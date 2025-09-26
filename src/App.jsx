@@ -46,7 +46,7 @@ import v29 from "./assets/images/viku29.png";
 import v30 from "./assets/images/viku30.png";
 
 // ShopNow component
-import ShopNow from "./shopnow";
+import ShopNow from "./shopnow.jsx";
 
 // GIFs loop without viku1
 const allGifs = [
@@ -86,7 +86,7 @@ function Home() {
   const navigate = useNavigate();
   const [stars, setStars] = useState([]);
   const [shootingStars, setShootingStars] = useState([]);
-  const [ufo, setUfo] = useState({ show: false, top: 0, left: 0 });
+  const [ufo, setUfo] = useState({ show: false, top: 0, left: 0, direction: "left-to-right" });
   const [visibleGif, setVisibleGif] = useState(null);
   const [gifPairIndex, setGifPairIndex] = useState(0);
   const [showPairs, setShowPairs] = useState(false);
@@ -107,21 +107,42 @@ function Home() {
 
   // Shooting stars
   useEffect(() => {
-    const spawnStar = () => {
-      const duration = Math.random() * 1 + 0.5;
-      setShootingStars([{ left: Math.random() * 100 + "%", duration, key: Date.now() }]);
-      setTimeout(() => setShootingStars([]), 1500);
+    const spawnShootingStar = () => {
+      // Only spawn if stars array is populated
+      if (stars.length === 0) return;
+      
+      // Select a random star from the existing stars
+      const randomStarIndex = Math.floor(Math.random() * stars.length);
+      const selectedStar = stars[randomStarIndex];
+      const direction = Math.random() < 0.5 ? "left-to-right" : "right-to-left";
+      const duration = 1.5; // Fixed duration for shooting star animation
+      setShootingStars([{
+        top: selectedStar.top,
+        left: selectedStar.left,
+        size: selectedStar.size,
+        direction,
+        duration,
+        key: Date.now(),
+      }]);
+      setTimeout(() => setShootingStars([]), duration * 1000);
     };
-    const interval = setInterval(spawnStar, 4000 + Math.random() * 3000);
+
+    // Spawn a shooting star every 7 seconds
+    const interval = setInterval(spawnShootingStar, 7000);
     return () => clearInterval(interval);
-  }, []);
+  }, [stars]);
 
   // UFO
   useEffect(() => {
-    const interval = setInterval(() => {
-      setUfo({ show: true, top: Math.random() * 80 + "%", left: "-5%" });
-      setTimeout(() => setUfo({ show: false, top: 0, left: 0 }), 5000);
-    }, 12000);
+    const spawnUfo = () => {
+      const direction = Math.random() < 0.5 ? "left-to-right" : "right-to-left";
+      const startLeft = direction === "left-to-right" ? "-5%" : "105%";
+      setUfo({ show: true, top: Math.random() * 80 + "%", left: startLeft, direction });
+      setTimeout(() => setUfo({ show: false, top: 0, left: 0, direction: "left-to-right" }), 5000);
+    };
+
+    // Spawn UFO every 12 seconds
+    const interval = setInterval(spawnUfo, 12000);
     return () => clearInterval(interval);
   }, []);
 
@@ -198,9 +219,26 @@ function Home() {
         <div key={i} className="star" style={{ top: s.top, left: s.left, width: s.size, height: s.size, animationDelay: s.delay }} />
       ))}
       {shootingStars.map(s => (
-        <div key={s.key} className="shooting-star" style={{ left: s.left, animationDuration: `${s.duration}s` }} />
+        <div
+          key={s.key}
+          className={`star shooting ${s.direction}`}
+          style={{
+            top: s.top,
+            left: s.left,
+            width: s.size,
+            height: s.size,
+            animationDuration: `${s.duration}s`,
+          }}
+        />
       ))}
-      {ufo.show && <img src={v15} alt="ufo" className="ufo" style={{ top: ufo.top, left: ufo.left }} />}
+      {ufo.show && (
+        <img
+          src={v15}
+          alt="ufo"
+          className={`ufo ${ufo.direction}`}
+          style={{ top: ufo.top, left: ufo.left }}
+        />
+      )}
 
       <div className="image-container">
         {rainDrops.map(d => (
