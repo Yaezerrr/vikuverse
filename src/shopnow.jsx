@@ -908,7 +908,6 @@ function ShopNow() {
               src={viku123}
               alt="viku123"
               className="hero-media demon-slayer-gif"
-             Robin
               loading="lazy"
               style={{
                 zIndex: 2,
@@ -970,7 +969,7 @@ function ShopNow() {
             </>
           )}
           <h1 className={textAnimation ? "hero-text-animate" : ""} style={{
-            fontFamily: "'Russo One', sans-serif",
+            fontFamily: "'Permanent Marker', cursive",
             color: activeCollection === 0 ? "#ADD8E6" : // Light whitish blue for Solo Leveling
                    activeCollection === 1 ? "#FFFF00" : // Yellow for Naruto
                    activeCollection === 2 ? "#D2B48C" : // Skin brown for One Piece
