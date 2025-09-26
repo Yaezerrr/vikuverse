@@ -17,6 +17,7 @@ import {
   faMinus,
   faCompass,
   faMessage,
+  faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { BsCart4 } from "react-icons/bs";
 import { HiMenuAlt3 } from "react-icons/hi";
@@ -124,6 +125,11 @@ function ShopNow() {
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
+  };
+
+  const handleCameraClick = () => {
+    console.log("Camera button clicked");
+    // Add your desired functionality here (e.g., open camera, trigger scan, etc.)
   };
 
   useEffect(() => {
@@ -709,6 +715,9 @@ function ShopNow() {
               onFocus={handleSearchFocus}
               onBlur={handleSearchBlur}
             />
+            <button className="camera-btn" onClick={handleCameraClick}>
+              <FontAwesomeIcon icon={faCamera} />
+            </button>
           </div>
           <button className="filter-btn">
             <FontAwesomeIcon icon={faSlidersH} />
@@ -970,11 +979,11 @@ function ShopNow() {
           )}
           <h1 className={textAnimation ? "hero-text-animate" : ""} style={{
             fontFamily: "'Permanent Marker', cursive",
-            color: activeCollection === 0 ? "#ADD8E6" : // Light whitish blue for Solo Leveling
-                   activeCollection === 1 ? "#FFFF00" : // Yellow for Naruto
-                   activeCollection === 2 ? "#D2B48C" : // Skin brown for One Piece
-                   activeCollection === 3 ? "#FFA500" : // Orange for Demon Slayer
-                   activeCollection === 4 ? "#87CEEB" : "#FFFFFF", // Light blue for Jujutsu Kaisen
+            color: activeCollection === 0 ? "#ADD8E6" :
+                   activeCollection === 1 ? "#FFFF00" :
+                   activeCollection === 2 ? "#D2B48C" :
+                   activeCollection === 3 ? "#FFA500" :
+                   activeCollection === 4 ? "#87CEEB" : "#FFFFFF",
             textShadow: activeCollection === 0 ? "0 0 10px #FFFFFF, 0 0 20px #FFFFFF" :
                         activeCollection === 1 ? "0 0 10px #FF4500, 0 0 20px #FF4500" :
                         activeCollection === 2 ? "0 0 10px #FF0000, 0 0 20px #FF0000" :
