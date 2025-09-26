@@ -45,8 +45,9 @@ import v28 from "./assets/images/viku28.png";
 import v29 from "./assets/images/viku29.png";
 import v30 from "./assets/images/viku30.png";
 
-// ShopNow component
+// Shop components
 import ShopNow from "./shopnow.jsx";
+import ShopNow2 from "./shopnow2.jsx";
 
 // GIFs loop without viku1
 const allGifs = [
@@ -108,14 +109,11 @@ function Home() {
   // Shooting stars
   useEffect(() => {
     const spawnShootingStar = () => {
-      // Only spawn if stars array is populated
       if (stars.length === 0) return;
-      
-      // Select a random star from the existing stars
       const randomStarIndex = Math.floor(Math.random() * stars.length);
       const selectedStar = stars[randomStarIndex];
       const direction = Math.random() < 0.5 ? "left-to-right" : "right-to-left";
-      const duration = 1.5; // Fixed duration for shooting star animation
+      const duration = 1.5;
       setShootingStars([{
         top: selectedStar.top,
         left: selectedStar.left,
@@ -126,8 +124,6 @@ function Home() {
       }]);
       setTimeout(() => setShootingStars([]), duration * 1000);
     };
-
-    // Spawn a shooting star every 7 seconds
     const interval = setInterval(spawnShootingStar, 7000);
     return () => clearInterval(interval);
   }, [stars]);
@@ -140,8 +136,6 @@ function Home() {
       setUfo({ show: true, top: Math.random() * 80 + "%", left: startLeft, direction });
       setTimeout(() => setUfo({ show: false, top: 0, left: 0, direction: "left-to-right" }), 5000);
     };
-
-    // Spawn UFO every 12 seconds
     const interval = setInterval(spawnUfo, 12000);
     return () => clearInterval(interval);
   }, []);
@@ -154,16 +148,13 @@ function Home() {
       setShowCenter(true);
       setShowViku31(true);
     }, 1500);
-
     const t2 = setTimeout(() => {
       setShowViku31(false);
       setShowSpecial(true);
     }, 5500);
-
     const t3 = setTimeout(() => {
       setShowPairs(true);
     }, 6500);
-
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
@@ -239,7 +230,6 @@ function Home() {
           style={{ top: ufo.top, left: ufo.left }}
         />
       )}
-
       <div className="image-container">
         {rainDrops.map(d => (
           <img key={d.key} src={d.src} className="rain-png" style={{ left: d.left, top: d.top, width: d.size }} />
@@ -253,7 +243,6 @@ function Home() {
         {showSpecial && <img src={v8} alt="viku8" className="gif show" style={{ top: "50%", left: "50%", transform: "translate(-50%,-50%)" }} />}
         {showViku31 && <img src={v31} alt="viku31" className="gif show" style={{ top: "50%", left: "50%", transform: "translate(-50%,-50%)" }} />}
       </div>
-
       <div className="button-container">
         <button className="animated-button join">Join</button>
         <button className="animated-button shop" onClick={() => navigate("/shopnow")}>Shop Now</button>
@@ -269,6 +258,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shopnow" element={<ShopNow />} />
+          <Route path="/shopnow2" element={<ShopNow2 />} />
         </Routes>
       </Router>
     </ErrorBoundary>
