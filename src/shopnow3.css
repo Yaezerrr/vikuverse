@@ -1151,7 +1151,7 @@
   z-index: 1;
   margin-top: -50px;
   margin-left: calc(-1 * var(--wrapper-margin));
-  left: calc(-1 * var(--wrapper-padding));
+  left: -100px;
   right: 0;
   padding: 20px;
   box-sizing: border-box;
